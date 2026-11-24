@@ -87,3 +87,21 @@ select.field option { color: #0f172a; }
     .js .reveal { opacity: 1; transform: none; }
     section { break-inside: avoid; }
 }
+
+/* ---------- Language switcher & Bangla typography ---------- */
+#siteHeader .lang-btn { color: #fff; border-color: rgba(255, 255, 255, .35); }
+#siteHeader .lang-btn:hover { background: rgba(255, 255, 255, .1); }
+#siteHeader.scrolled .lang-btn { color: #0f172a; border-color: #cbd5e1; }
+#siteHeader.scrolled .lang-btn:hover { background: #f1f5f9; }
+html[lang="en"] .lang-btn .lang-label { font-family: 'Hind Siliguri', sans-serif; }
+html[lang="bn"] .lang-btn .lang-label { font-family: 'Inter', sans-serif; }
+
+/* Hide the page for a moment while a saved Bangla preference is applied (removed by i18n.js, or after 2s) */
+html.lang-loading body { visibility: hidden; }
+
+html[lang="bn"] body,
+html[lang="bn"] .font-display { font-family: 'Hind Siliguri', 'Inter', system-ui, sans-serif; }
+/* Bangla script needs no letter-spacing and more line height than Latin headings */
+html[lang="bn"] [class*="tracking-"] { letter-spacing: 0; }
+html[lang="bn"] h1 { line-height: 1.25; }
+html[lang="bn"] h2, html[lang="bn"] h3 { line-height: 1.35; }

@@ -22,10 +22,27 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
-    <script>document.documentElement.classList.add("js");</script>
+    <script>
+        // Pick the language before first paint so Bangla visitors never see a flash of English
+        (function () {
+            var d = document.documentElement, lang = "en";
+            d.classList.add("js");
+            try {
+                var p = new URLSearchParams(location.search).get("lang");
+                var saved = localStorage.getItem("hs-lang");
+                var prefersBn = (navigator.languages || [navigator.language]).some(function (x) { return /^bn/i.test(x); });
+                lang = (p === "bn" || p === "en") ? p : (saved === "bn" || saved === "en") ? saved : (prefersBn ? "bn" : "en");
+            } catch (e) {}
+            d.setAttribute("data-lang", lang);
+            if (lang === "bn") {
+                d.classList.add("lang-loading");
+                setTimeout(function () { d.classList.remove("lang-loading"); }, 2000); // never stay hidden if a script fails
+            }
+        })();
+    </script>
 
     <!-- Structured data: helps Google show the business correctly in search -->
     <script type="application/ld+json">
@@ -55,7 +72,7 @@
             <div class="flex justify-between items-center h-16 lg:h-20">
                 <a href="#home" class="flex items-center gap-3" aria-label="Hermano Synergy home">
                     <span class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white font-display font-extrabold text-lg shadow-lg shadow-brand-600/30">HS</span>
-                    <span class="brand-name font-display text-xl sm:text-2xl font-bold tracking-tight">Hermano<span class="text-brand-500">Synergy</span></span>
+                    <span class="brand-name font-display text-lg sm:text-2xl font-bold tracking-tight">Hermano<span class="text-brand-500">Synergy</span></span>
                 </a>
 
                 <nav class="hidden lg:flex items-center gap-8 text-sm font-medium" aria-label="Main">
@@ -68,6 +85,9 @@
                 </nav>
 
                 <div class="flex items-center gap-2">
+                    <button id="langToggle" type="button" class="lang-btn inline-flex items-center gap-2 h-10 px-2.5 sm:px-3 rounded-xl border text-sm font-semibold transition-colors" aria-label="বাংলায় দেখুন" lang="bn">
+                        <i class="fa-solid fa-language text-base hidden sm:inline" aria-hidden="true"></i><span class="lang-label">বাংলা</span>
+                    </button>
                     <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-brand-600/25">
                         Get a Quote <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
@@ -498,11 +518,11 @@
                                     <label for="service" class="block text-sm font-medium text-brand-100 mb-2">Service of interest</label>
                                     <select id="service" name="service" class="field">
                                         <option value="">Select a service…</option>
-                                        <option>Civil Infrastructure</option>
-                                        <option>Institutional Building</option>
-                                        <option>Nutritional Supply</option>
-                                        <option>Defense Logistics</option>
-                                        <option>Other</option>
+                                        <option value="Civil Infrastructure">Civil Infrastructure</option>
+                                        <option value="Institutional Building">Institutional Building</option>
+                                        <option value="Nutritional Supply">Nutritional Supply</option>
+                                        <option value="Defense Logistics">Defense Logistics</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
                             </div>
@@ -513,7 +533,7 @@
                             </div>
 
                             <button id="submitBtn" type="submit" class="w-full bg-white text-brand-950 font-semibold py-4 rounded-xl hover:bg-brand-100 transition-colors inline-flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-wait">
-                                <span class="btn-label">Send Message</span> <i class="btn-icon fa-solid fa-paper-plane text-sm"></i>
+                                <span class="btn-label" data-ui="send">Send Message</span> <i class="btn-icon fa-solid fa-paper-plane text-sm"></i>
                             </button>
                             <p class="text-xs text-brand-200/80 text-center">Your draft is saved on this device until you send it. We never share your details.</p>
                             <p id="formStatus" class="hidden text-sm rounded-xl px-4 py-3 border" role="status" aria-live="polite"></p>
@@ -583,6 +603,7 @@
         <i class="fa-solid fa-arrow-up"></i>
     </a>
 
+    <script src="assets/js/i18n.js" defer></script>
     <script src="assets/js/main.js" defer></script>
 </body>
 </html>

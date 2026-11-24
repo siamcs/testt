@@ -1,10 +1,13 @@
 (function () {
+    // Translations live in i18n.js; fall back to plain English if it failed to load
+    const I18N = window.I18N || { t: k => k, num: n => String(n), lang: 'en' };
+    const t = (k, v) => I18N.t(k, v);
+
     const header = document.getElementById('siteHeader');
     const toTop = document.getElementById('toTop');
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
-
-    document.getElementById('year').textContent = new Date().getFullYear();
+    menuBtn.setAttribute('aria-label', t('openMenu'));
 
     // Header style + back-to-top visibility on scroll
     function onScroll() {
@@ -22,7 +25,7 @@
     function setMenu(open) {
         mobileMenu.classList.toggle('open', open);
         menuBtn.setAttribute('aria-expanded', String(open));
-        menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        menuBtn.setAttribute('aria-label', t(open ? 'closeMenu' : 'openMenu'));
         menuBtn.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
         onScroll();
     }
@@ -65,7 +68,7 @@
             const target = +el.dataset.count, start = performance.now(), dur = 1400;
             (function tick(now) {
                 const p = Math.min((now - start) / dur, 1);
-                el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+                el.textContent = I18N.num(Math.round(target * (1 - Math.pow(1 - p, 3))));
                 if (p < 1) requestAnimationFrame(tick);
             })(start);
         });
@@ -124,7 +127,7 @@
 
     function setLoading(on) {
         submitBtn.disabled = on;
-        submitBtn.querySelector('.btn-label').textContent = on ? 'Sending…' : 'Send Message';
+        submitBtn.querySelector('.btn-label').textContent = t(on ? 'sending' : 'send');
         submitBtn.querySelector('.btn-icon').className = on
             ? 'btn-icon fa-solid fa-spinner fa-spin text-sm'
             : 'btn-icon fa-solid fa-paper-plane text-sm';
@@ -164,12 +167,12 @@
         const firstBad = checked[results.indexOf(false)];
         if (firstBad) {
             firstBad.focus();
-            showStatus('error', 'Please fix the highlighted fields and try again.');
+            showStatus('error', t('fixFields'));
             return;
         }
 
         // Spam trap filled in: pretend success, send nothing
-        if (form.website.value) { form.reset(); showStatus('success', 'Thank you! Your message has been received.'); return; }
+        if (form.website.value) { form.reset(); showStatus('success', t('thanksShort')); return; }
 
         const data = {};
         draftFields.forEach(n => { data[n] = form[n].value.trim(); });
@@ -178,12 +181,12 @@
         if (!endpoint) {
             // No form service configured: hand the message to the visitor's email app
             window.location.href = buildMailto(data);
-            showStatus('info', `Your email app should open with the message ready — just press Send. If nothing opened, email us at ${form.dataset.email}.`);
+            showStatus('info', t('mailOpened', { email: form.dataset.email }));
             return;
         }
 
         if (!navigator.onLine) {
-            showStatus('error', 'You appear to be offline. Your draft is saved — please try again when you are connected.');
+            showStatus('error', t('offline'));
             return;
         }
 
@@ -195,13 +198,19 @@
                 body: JSON.stringify(data),
             });
             if (!res.ok) throw new Error('HTTP ' + res.status);
-            showStatus('success', `Thank you, ${data.firstName}! Your message has been received — we'll get back to you within one business day.`);
+            showStatus('success', t('success', { name: data.firstName }));
             form.reset();
             clearDraft();
         } catch (err) {
-            showStatus('error', `Sorry, your message could not be sent right now. Your draft is saved — please try again, or email us at ${form.dataset.email}.`);
+            showStatus('error', t('failed', { email: form.dataset.email }));
         } finally {
             setLoading(false);
         }
+    });
+
+    // When the language changes: refresh the menu label and clear any message shown in the old language
+    document.addEventListener('langchange', () => {
+        menuBtn.setAttribute('aria-label', t(mobileMenu.classList.contains('open') ? 'closeMenu' : 'openMenu'));
+        status.className = 'hidden';
     });
 })();
