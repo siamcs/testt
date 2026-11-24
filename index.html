@@ -7,89 +7,44 @@
     <meta name="description" content="Hermano Synergy delivers civil infrastructure, institutional construction, nutritional supply and defense logistics across Bangladesh.">
     <meta name="theme-color" content="#0b1b3f">
 
+    <meta name="robots" content="index, follow">
+
+    <!-- Social sharing preview (Facebook, LinkedIn, WhatsApp, X) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Hermano Synergy">
+    <meta property="og:title" content="Hermano Synergy | Engineering & Logistics Excellence">
+    <meta property="og:description" content="Civil infrastructure, institutional construction, nutritional supply and defense logistics across Bangladesh.">
+    <meta property="og:image" content="https://picsum.photos/id/1015/1200/630">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/img/favicon.svg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script>document.documentElement.classList.add("js");</script>
 
-    <script>document.documentElement.classList.add('js');</script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                        display: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#eff5ff', 100: '#dbe8fe', 200: '#bfd6fe', 400: '#60a5fa',
-                            500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#0f2a5c', 950: '#0b1b3f',
-                        },
-                        accent: { 400: '#fbbf24', 500: '#f59e0b' },
-                    },
-                },
-            },
-        };
+    <!-- Structured data: helps Google show the business correctly in search -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Hermano Synergy",
+        "description": "Integrated solutions in civil infrastructure, institutional construction, nutritional supply, and defense logistics across Bangladesh.",
+        "email": "info@hermanosynergy.com",
+        "foundingDate": "2010",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Rampura, Banasree",
+            "addressLocality": "Dhaka",
+            "addressCountry": "BD"
+        },
+        "areaServed": "Bangladesh"
+    }
     </script>
-
-    <style>
-        /* Offset anchor jumps so the sticky header never covers section titles */
-        section[id] { scroll-margin-top: 5rem; }
-
-        .hero-bg {
-            background:
-                linear-gradient(105deg, rgba(11, 27, 63, .92) 0%, rgba(11, 27, 63, .75) 45%, rgba(11, 27, 63, .35) 100%),
-                url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat;
-        }
-
-        /* Header: transparent over the hero, solid once scrolled */
-        #siteHeader { transition: background-color .3s, box-shadow .3s, color .3s; }
-        #siteHeader.scrolled { background: rgba(255, 255, 255, .92); backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgb(0 0 0 / .06), 0 8px 24px -12px rgb(0 0 0 / .15); }
-        #siteHeader .nav-link { color: rgba(255, 255, 255, .85); }
-        #siteHeader.scrolled .nav-link { color: #334155; }
-        #siteHeader .nav-link:hover, #siteHeader .nav-link.active { color: #fff; }
-        #siteHeader.scrolled .nav-link:hover, #siteHeader.scrolled .nav-link.active { color: #2563eb; }
-        .nav-link { position: relative; }
-        .nav-link::after {
-            content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px;
-            background: currentColor; transform: scaleX(0); transition: transform .25s ease;
-        }
-        .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
-        #siteHeader .brand-name { color: #fff; }
-        #siteHeader.scrolled .brand-name { color: #0f172a; }
-        #siteHeader .menu-btn { color: #fff; }
-        #siteHeader.scrolled .menu-btn { color: #0f172a; }
-
-        /* Mobile menu */
-        #mobileMenu { transition: opacity .25s ease, transform .25s ease, visibility .25s; }
-        #mobileMenu:not(.open) { opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none; }
-
-        /* Reveal-on-scroll */
-        .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
-        .js .reveal.visible { opacity: 1; transform: none; }
-
-        .card-lift { transition: transform .35s cubic-bezier(.4, 0, .2, 1), box-shadow .35s; }
-        .card-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -16px rgb(15 42 92 / .25); }
-
-        .field {
-            width: 100%; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .2);
-            border-radius: .875rem; padding: .875rem 1rem; color: #fff; transition: border-color .2s, background-color .2s;
-        }
-        .field::placeholder { color: rgba(191, 214, 254, .55); }
-        .field:focus { outline: none; border-color: #60a5fa; background: rgba(255, 255, 255, .1); box-shadow: 0 0 0 3px rgba(96, 165, 250, .25); }
-        .field.invalid { border-color: #f87171; }
-        select.field option { color: #0f172a; }
-
-        :focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; }
-
-        @media (prefers-reduced-motion: reduce) {
-            html { scroll-behavior: auto; }
-            .js .reveal { opacity: 1; transform: none; transition: none; }
-            *, *::before, *::after { animation: none !important; transition: none !important; }
-        }
-    </style>
 </head>
 <body class="font-sans bg-slate-50 text-slate-700 antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] bg-white text-brand-700 px-4 py-2 rounded-lg shadow">Skip to content</a>
@@ -414,6 +369,54 @@
             </div>
         </section>
 
+        <!-- FAQ (uses <details>, so it works even without JavaScript) -->
+        <section id="faq" class="py-20 lg:py-28 bg-slate-50">
+            <div class="max-w-3xl mx-auto px-5 sm:px-6">
+                <div class="reveal text-center mb-12">
+                    <span class="text-brand-600 font-semibold text-sm tracking-[.2em] uppercase">FAQ</span>
+                    <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mt-3">Common questions</h2>
+                </div>
+
+                <div class="reveal space-y-3">
+                    <details class="faq group bg-white rounded-2xl border border-slate-200/70 open:shadow-lg open:shadow-slate-200/60">
+                        <summary class="flex items-center justify-between gap-4 p-5 sm:p-6 font-semibold text-slate-900">
+                            What kinds of projects do you take on?
+                            <i class="faq-icon fa-solid fa-plus text-brand-600 flex-shrink-0"></i>
+                        </summary>
+                        <p class="px-5 sm:px-6 pb-6 -mt-1 text-slate-600 leading-relaxed">We work across four divisions: civil infrastructure (roads, highways, paving, structural concrete), institutional buildings such as schools and campuses, nutritional supply of fortified foods, and defense logistics including footwear, uniforms and rations.</p>
+                    </details>
+                    <details class="faq group bg-white rounded-2xl border border-slate-200/70 open:shadow-lg open:shadow-slate-200/60">
+                        <summary class="flex items-center justify-between gap-4 p-5 sm:p-6 font-semibold text-slate-900">
+                            Do you work on government tenders?
+                            <i class="faq-icon fa-solid fa-plus text-brand-600 flex-shrink-0"></i>
+                        </summary>
+                        <p class="px-5 sm:px-6 pb-6 -mt-1 text-slate-600 leading-relaxed">Yes. Our clients include government departments and agencies such as the Roads &amp; Highways Department, Public Works, education authorities and disciplined forces. Send us the tender reference and we will review it with you.</p>
+                    </details>
+                    <details class="faq group bg-white rounded-2xl border border-slate-200/70 open:shadow-lg open:shadow-slate-200/60">
+                        <summary class="flex items-center justify-between gap-4 p-5 sm:p-6 font-semibold text-slate-900">
+                            Where do you operate?
+                            <i class="faq-icon fa-solid fa-plus text-brand-600 flex-shrink-0"></i>
+                        </summary>
+                        <p class="px-5 sm:px-6 pb-6 -mt-1 text-slate-600 leading-relaxed">Our head office is in Rampura, Banasree, Dhaka, and we deliver projects and supplies across Bangladesh.</p>
+                    </details>
+                    <details class="faq group bg-white rounded-2xl border border-slate-200/70 open:shadow-lg open:shadow-slate-200/60">
+                        <summary class="flex items-center justify-between gap-4 p-5 sm:p-6 font-semibold text-slate-900">
+                            How do I get a quote?
+                            <i class="faq-icon fa-solid fa-plus text-brand-600 flex-shrink-0"></i>
+                        </summary>
+                        <p class="px-5 sm:px-6 pb-6 -mt-1 text-slate-600 leading-relaxed">Use the <a href="#contact" class="text-brand-600 font-medium hover:underline">contact form</a> below or email <a href="mailto:info@hermanosynergy.com" class="text-brand-600 font-medium hover:underline">info@hermanosynergy.com</a>. Include the scope, location and timeline, and we will come back to you within one business day.</p>
+                    </details>
+                    <details class="faq group bg-white rounded-2xl border border-slate-200/70 open:shadow-lg open:shadow-slate-200/60">
+                        <summary class="flex items-center justify-between gap-4 p-5 sm:p-6 font-semibold text-slate-900">
+                            Are your supplies certified?
+                            <i class="faq-icon fa-solid fa-plus text-brand-600 flex-shrink-0"></i>
+                        </summary>
+                        <p class="px-5 sm:px-6 pb-6 -mt-1 text-slate-600 leading-relaxed">Our nutritional and defense supplies are sourced and packaged to meet the hygiene and certification standards each client requires. Documentation is provided with every delivery.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
         <!-- CONTACT -->
         <section id="contact" class="relative py-20 lg:py-28 bg-brand-950 text-white overflow-hidden">
             <div class="absolute -top-40 -right-40 w-[30rem] h-[30rem] bg-brand-600/30 rounded-full blur-3xl" aria-hidden="true"></div>
@@ -450,7 +453,19 @@
                     </div>
 
                     <div class="lg:col-span-3 reveal">
-                        <form id="contactForm" class="bg-white/[.06] backdrop-blur-lg border border-white/15 p-6 sm:p-10 rounded-3xl space-y-5" novalidate>
+                        <!--
+                            HOW MESSAGES ARE DELIVERED
+                            - Leave data-endpoint empty: "Send" opens the visitor's email app with the message pre-filled to data-email.
+                            - To receive messages directly, create a free form endpoint (e.g. formspree.io or web3forms.com)
+                              and paste its URL into data-endpoint. The form then posts there and shows a success message.
+                        -->
+                        <form id="contactForm" class="relative bg-white/[.06] backdrop-blur-lg border border-white/15 p-6 sm:p-10 rounded-3xl space-y-5" novalidate
+                              data-endpoint="" data-email="info@hermanosynergy.com">
+                            <!-- Spam trap: hidden from people, bots fill it in -->
+                            <div class="hp-field" aria-hidden="true">
+                                <label for="website">Leave this empty</label>
+                                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+                            </div>
                             <div class="grid sm:grid-cols-2 gap-5">
                                 <div>
                                     <label for="firstName" class="block text-sm font-medium text-brand-100 mb-2">First name <span class="text-rose-300">*</span></label>
@@ -473,16 +488,23 @@
                                     <input id="company" name="company" type="text" autocomplete="organization" class="field" placeholder="Organization name">
                                 </div>
                             </div>
-                            <div>
-                                <label for="service" class="block text-sm font-medium text-brand-100 mb-2">Service of interest</label>
-                                <select id="service" name="service" class="field">
-                                    <option value="">Select a service…</option>
-                                    <option>Civil Infrastructure</option>
-                                    <option>Institutional Building</option>
-                                    <option>Nutritional Supply</option>
-                                    <option>Defense Logistics</option>
-                                    <option>Other</option>
-                                </select>
+                            <div class="grid sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-brand-100 mb-2">Phone</label>
+                                    <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" pattern="[+0-9 \(\)\-]{7,20}" class="field" placeholder="+880 1XXX-XXXXXX">
+                                    <p class="error hidden text-xs text-rose-300 mt-1.5">Please enter a valid phone number.</p>
+                                </div>
+                                <div>
+                                    <label for="service" class="block text-sm font-medium text-brand-100 mb-2">Service of interest</label>
+                                    <select id="service" name="service" class="field">
+                                        <option value="">Select a service…</option>
+                                        <option>Civil Infrastructure</option>
+                                        <option>Institutional Building</option>
+                                        <option>Nutritional Supply</option>
+                                        <option>Defense Logistics</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
                             </div>
                             <div>
                                 <label for="message" class="block text-sm font-medium text-brand-100 mb-2">Project details <span class="text-rose-300">*</span></label>
@@ -490,10 +512,11 @@
                                 <p class="error hidden text-xs text-rose-300 mt-1.5">Please describe your project (at least 10 characters).</p>
                             </div>
 
-                            <button type="submit" class="w-full bg-white text-brand-950 font-semibold py-4 rounded-xl hover:bg-brand-100 transition-colors inline-flex items-center justify-center gap-2">
-                                Send Message <i class="fa-solid fa-paper-plane text-sm"></i>
+                            <button id="submitBtn" type="submit" class="w-full bg-white text-brand-950 font-semibold py-4 rounded-xl hover:bg-brand-100 transition-colors inline-flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-wait">
+                                <span class="btn-label">Send Message</span> <i class="btn-icon fa-solid fa-paper-plane text-sm"></i>
                             </button>
-                            <p id="formStatus" class="hidden text-sm rounded-xl px-4 py-3 bg-emerald-500/15 border border-emerald-400/30 text-emerald-200" role="status" aria-live="polite"></p>
+                            <p class="text-xs text-brand-200/80 text-center">Your draft is saved on this device until you send it. We never share your details.</p>
+                            <p id="formStatus" class="hidden text-sm rounded-xl px-4 py-3 border" role="status" aria-live="polite"></p>
                         </form>
                     </div>
                 </div>
@@ -523,6 +546,7 @@
                         <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
                         <li><a href="#process" class="hover:text-white transition-colors">How We Work</a></li>
                         <li><a href="#projects" class="hover:text-white transition-colors">Projects</a></li>
+                        <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
                         <li><a href="#contact" class="hover:text-white transition-colors">Careers &amp; Tenders</a></li>
                     </ul>
                 </div>
@@ -559,115 +583,6 @@
         <i class="fa-solid fa-arrow-up"></i>
     </a>
 
-    <script>
-        (function () {
-            const header = document.getElementById('siteHeader');
-            const toTop = document.getElementById('toTop');
-            const menuBtn = document.getElementById('menuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-
-            document.getElementById('year').textContent = new Date().getFullYear();
-
-            // Header style + back-to-top visibility on scroll
-            function onScroll() {
-                const y = window.scrollY;
-                header.classList.toggle('scrolled', y > 40 || mobileMenu.classList.contains('open'));
-                const show = y > 600;
-                toTop.classList.toggle('opacity-0', !show);
-                toTop.classList.toggle('pointer-events-none', !show);
-                toTop.classList.toggle('translate-y-3', !show);
-            }
-            window.addEventListener('scroll', onScroll, { passive: true });
-            onScroll();
-
-            // Mobile menu
-            function setMenu(open) {
-                mobileMenu.classList.toggle('open', open);
-                menuBtn.setAttribute('aria-expanded', String(open));
-                menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-                menuBtn.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
-                onScroll();
-            }
-            menuBtn.addEventListener('click', e => {
-                e.stopPropagation(); // icon swap detaches e.target, which would trip the outside-click check
-                setMenu(!mobileMenu.classList.contains('open'));
-            });
-            mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
-            document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
-            document.addEventListener('click', e => {
-                if (mobileMenu.classList.contains('open') && !header.contains(e.target)) setMenu(false);
-            });
-            window.addEventListener('resize', () => { if (window.innerWidth >= 1024) setMenu(false); });
-
-            // Highlight the nav link of the section in view
-            const links = document.querySelectorAll('.nav-link');
-            const sectionObserver = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) return;
-                    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id));
-                });
-            }, { rootMargin: '-45% 0px -50% 0px' });
-            document.querySelectorAll('main section[id]').forEach(s => sectionObserver.observe(s));
-
-            // Reveal on scroll
-            const revealObserver = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        revealObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.12 });
-            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-            // Count-up for hero stats
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (!reduceMotion) {
-                document.querySelectorAll('[data-count]').forEach(el => {
-                    const target = +el.dataset.count, start = performance.now(), dur = 1400;
-                    (function tick(now) {
-                        const p = Math.min((now - start) / dur, 1);
-                        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
-                        if (p < 1) requestAnimationFrame(tick);
-                    })(start);
-                });
-            }
-
-            // "Request a quote" on a service card pre-selects it in the form
-            const serviceSelect = document.getElementById('service');
-            document.querySelectorAll('.service-cta').forEach(a => {
-                a.addEventListener('click', () => { serviceSelect.value = a.dataset.service; });
-            });
-
-            // Contact form validation with inline messages
-            const form = document.getElementById('contactForm');
-            const status = document.getElementById('formStatus');
-            function validate(field) {
-                const ok = field.checkValidity() && (field.type !== 'text' || field.value.trim() !== '' || !field.required);
-                field.classList.toggle('invalid', !ok);
-                field.setAttribute('aria-invalid', String(!ok));
-                const err = field.parentElement.querySelector('.error');
-                if (err) err.classList.toggle('hidden', ok);
-                return ok;
-            }
-            form.querySelectorAll('[required]').forEach(f => {
-                f.addEventListener('blur', () => validate(f));
-                f.addEventListener('input', () => { if (f.classList.contains('invalid')) validate(f); });
-            });
-            form.addEventListener('submit', e => {
-                e.preventDefault();
-                const fields = [...form.querySelectorAll('[required]')];
-                const results = fields.map(validate);
-                const firstBad = fields[results.indexOf(false)];
-                if (firstBad) { firstBad.focus(); return; }
-
-                const name = form.firstName.value.trim();
-                status.textContent = `Thank you, ${name}! Your message has been received — we'll get back to you within one business day.`;
-                status.classList.remove('hidden');
-                form.reset();
-                setTimeout(() => status.classList.add('hidden'), 8000);
-            });
-        })();
-    </script>
+    <script src="assets/js/main.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,12 @@
+{
+  "name": "hermano-synergy-site",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --minify",
+    "watch": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --watch",
+    "serve": "http-server . -p 5510 -c-1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

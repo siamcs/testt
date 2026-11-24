@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Edit this file, then run `npm run build` to regenerate assets/css/styles.css */
+
+html { scroll-behavior: smooth; }
+
+/* Offset anchor jumps so the sticky header never covers section titles */
+section[id] { scroll-margin-top: 5rem; }
+
+.hero-bg {
+    background:
+        linear-gradient(105deg, rgba(11, 27, 63, .92) 0%, rgba(11, 27, 63, .75) 45%, rgba(11, 27, 63, .35) 100%),
+        url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat,
+        #0b1b3f;
+}
+
+/* Header: transparent over the hero, solid once scrolled */
+#siteHeader { transition: background-color .3s, box-shadow .3s, color .3s; }
+#siteHeader.scrolled { background: rgba(255, 255, 255, .92); backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgb(0 0 0 / .06), 0 8px 24px -12px rgb(0 0 0 / .15); }
+#siteHeader .nav-link { color: rgba(255, 255, 255, .85); }
+#siteHeader.scrolled .nav-link { color: #334155; }
+#siteHeader .nav-link:hover, #siteHeader .nav-link.active { color: #fff; }
+#siteHeader.scrolled .nav-link:hover, #siteHeader.scrolled .nav-link.active { color: #2563eb; }
+.nav-link { position: relative; }
+.nav-link::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px;
+    background: currentColor; transform: scaleX(0); transition: transform .25s ease;
+}
+.nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+#siteHeader .brand-name { color: #fff; }
+#siteHeader.scrolled .brand-name { color: #0f172a; }
+#siteHeader .menu-btn { color: #fff; }
+#siteHeader.scrolled .menu-btn { color: #0f172a; }
+
+/* Mobile menu */
+#mobileMenu { transition: opacity .25s ease, transform .25s ease, visibility .25s; }
+#mobileMenu:not(.open) { opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none; }
+
+/* Reveal-on-scroll (only hides content when JS is running) */
+.js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.js .reveal.visible { opacity: 1; transform: none; }
+
+.card-lift { transition: transform .35s cubic-bezier(.4, 0, .2, 1), box-shadow .35s; }
+.card-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -16px rgb(15 42 92 / .25); }
+
+/* Image that failed to load: show a branded placeholder instead of a broken icon */
+.img-fallback {
+    background: linear-gradient(135deg, #dbe8fe, #eff5ff);
+    position: relative;
+}
+.img-fallback img { visibility: hidden; }
+.img-fallback::after {
+    content: '\f03e'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; color: #93b4f5;
+}
+
+/* FAQ */
+.faq summary { list-style: none; cursor: pointer; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary .faq-icon { transition: transform .25s ease; }
+.faq[open] summary .faq-icon { transform: rotate(45deg); }
+
+/* Form */
+.field {
+    width: 100%; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .2);
+    border-radius: .875rem; padding: .875rem 1rem; color: #fff; transition: border-color .2s, background-color .2s;
+}
+.field::placeholder { color: rgba(191, 214, 254, .55); }
+.field:focus { outline: none; border-color: #60a5fa; background: rgba(255, 255, 255, .1); box-shadow: 0 0 0 3px rgba(96, 165, 250, .25); }
+.field.invalid { border-color: #f87171; }
+select.field option { color: #0f172a; }
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+:focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .js .reveal { opacity: 1; transform: none; transition: none; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media print {
+    #siteHeader, #toTop, #contactForm, .no-print { display: none !important; }
+    .js .reveal { opacity: 1; transform: none; }
+    section { break-inside: avoid; }
+}
