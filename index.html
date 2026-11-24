@@ -1,492 +1,673 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hermano Synergy | Engineering & Logistics Excellence</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Hermano Synergy delivers civil infrastructure, institutional construction, nutritional supply and defense logistics across Bangladesh.">
+    <meta name="theme-color" content="#0b1b3f">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <script>document.documentElement.classList.add('js');</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff5ff', 100: '#dbe8fe', 200: '#bfd6fe', 400: '#60a5fa',
+                            500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#0f2a5c', 950: '#0b1b3f',
+                        },
+                        accent: { 400: '#fbbf24', 500: '#f59e0b' },
+                    },
+                },
+            },
+        };
+    </script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
-        
-        :root {
-            --primary: #1e40af;
-        }
-        
+        /* Offset anchor jumps so the sticky header never covers section titles */
+        section[id] { scroll-margin-top: 5rem; }
+
         .hero-bg {
-            background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.75)), url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat;
+            background:
+                linear-gradient(105deg, rgba(11, 27, 63, .92) 0%, rgba(11, 27, 63, .75) 45%, rgba(11, 27, 63, .35) 100%),
+                url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat;
         }
-        
-        .nav-link {
-            transition: all 0.3s ease;
+
+        /* Header: transparent over the hero, solid once scrolled */
+        #siteHeader { transition: background-color .3s, box-shadow .3s, color .3s; }
+        #siteHeader.scrolled { background: rgba(255, 255, 255, .92); backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgb(0 0 0 / .06), 0 8px 24px -12px rgb(0 0 0 / .15); }
+        #siteHeader .nav-link { color: rgba(255, 255, 255, .85); }
+        #siteHeader.scrolled .nav-link { color: #334155; }
+        #siteHeader .nav-link:hover, #siteHeader .nav-link.active { color: #fff; }
+        #siteHeader.scrolled .nav-link:hover, #siteHeader.scrolled .nav-link.active { color: #2563eb; }
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px;
+            background: currentColor; transform: scaleX(0); transition: transform .25s ease;
         }
-        
-        .nav-link:hover {
-            color: #3b82f6;
-            transform: translateY(-2px);
+        .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+        #siteHeader .brand-name { color: #fff; }
+        #siteHeader.scrolled .brand-name { color: #0f172a; }
+        #siteHeader .menu-btn { color: #fff; }
+        #siteHeader.scrolled .menu-btn { color: #0f172a; }
+
+        /* Mobile menu */
+        #mobileMenu { transition: opacity .25s ease, transform .25s ease, visibility .25s; }
+        #mobileMenu:not(.open) { opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none; }
+
+        /* Reveal-on-scroll */
+        .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+        .js .reveal.visible { opacity: 1; transform: none; }
+
+        .card-lift { transition: transform .35s cubic-bezier(.4, 0, .2, 1), box-shadow .35s; }
+        .card-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -16px rgb(15 42 92 / .25); }
+
+        .field {
+            width: 100%; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: .875rem; padding: .875rem 1rem; color: #fff; transition: border-color .2s, background-color .2s;
         }
-        
-        .service-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .service-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-        
-        .section-header {
-            position: relative;
-        }
-        
-        .section-header:after {
-            content: '';
-            position: absolute;
-            width: 80px;
-            height: 4px;
-            background: #3b82f6;
-            bottom: -8px;
-            left: 0;
+        .field::placeholder { color: rgba(191, 214, 254, .55); }
+        .field:focus { outline: none; border-color: #60a5fa; background: rgba(255, 255, 255, .1); box-shadow: 0 0 0 3px rgba(96, 165, 250, .25); }
+        .field.invalid { border-color: #f87171; }
+        select.field option { color: #0f172a; }
+
+        :focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .js .reveal { opacity: 1; transform: none; transition: none; }
+            *, *::before, *::after { animation: none !important; transition: none !important; }
         }
     </style>
 </head>
-<body class="font-sans bg-gray-50 text-gray-800">
-    <!-- NAVBAR -->
-    <nav class="bg-white border-b sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-700 rounded-xl flex items-center justify-center text-white font-bold text-2xl">HS</div>
-                    <div>
-                        <span class="text-2xl font-bold tracking-tight text-gray-900">Hermano</span>
-                        <span class="text-2xl font-bold tracking-tight text-blue-600">Synergy</span>
-                    </div>
-                </div>
+<body class="font-sans bg-slate-50 text-slate-700 antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] bg-white text-brand-700 px-4 py-2 rounded-lg shadow">Skip to content</a>
 
-                <!-- Menu -->
-                <div class="hidden md:flex items-center gap-8 text-sm font-medium">
-                    <a href="#home" class="nav-link text-gray-700 hover:text-blue-600">Home</a>
-                    <a href="#about" class="nav-link text-gray-700 hover:text-blue-600">About</a>
-                    <a href="#services" class="nav-link text-gray-700 hover:text-blue-600">Capabilities</a>
-                    <a href="#projects" class="nav-link text-gray-700 hover:text-blue-600">Projects</a>
-                    <a href="#clients" class="nav-link text-gray-700 hover:text-blue-600">Clients</a>
-                    <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600">Contact</a>
-                </div>
+    <!-- HEADER -->
+    <header id="siteHeader" class="fixed inset-x-0 top-0 z-50">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6">
+            <div class="flex justify-between items-center h-16 lg:h-20">
+                <a href="#home" class="flex items-center gap-3" aria-label="Hermano Synergy home">
+                    <span class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white font-display font-extrabold text-lg shadow-lg shadow-brand-600/30">HS</span>
+                    <span class="brand-name font-display text-xl sm:text-2xl font-bold tracking-tight">Hermano<span class="text-brand-500">Synergy</span></span>
+                </a>
 
-                <div class="flex items-center gap-4">
-                    <a href="#contact" 
-                       class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors">
-                        Get a Quote
+                <nav class="hidden lg:flex items-center gap-8 text-sm font-medium" aria-label="Main">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#services" class="nav-link">Capabilities</a>
+                    <a href="#process" class="nav-link">Process</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-2">
+                    <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-brand-600/25">
+                        Get a Quote <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
-                    <button class="md:hidden text-2xl">
+                    <button id="menuBtn" class="menu-btn lg:hidden w-11 h-11 rounded-xl flex items-center justify-center text-xl hover:bg-white/10" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
                         <i class="fa-solid fa-bars"></i>
                     </button>
                 </div>
             </div>
         </div>
-    </nav>
 
-    <!-- HERO -->
-    <section id="home" class="hero-bg text-white min-h-screen flex items-center">
-        <div class="max-w-7xl mx-auto px-6 py-24">
-            <div class="max-w-3xl">
-                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-5 py-2 rounded-full text-sm mb-6">
-                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    Dhaka, Bangladesh
-                </div>
-                
-                <h1 class="text-6xl md:text-7xl font-bold leading-tight mb-6">
-                    Building Tomorrow,<br>Delivering Excellence
-                </h1>
-                
-                <p class="text-xl text-gray-200 mb-10 max-w-lg">
-                    Hermano Synergy delivers integrated solutions in civil infrastructure, institutional construction, 
-                    nutritional supply, and defense logistics across Bangladesh.
-                </p>
-                
-                <div class="flex flex-wrap gap-4">
-                    <a href="#contact" 
-                       class="px-8 py-4 bg-white text-blue-700 font-semibold rounded-2xl hover:bg-gray-100 transition-all inline-flex items-center gap-3">
-                        Start a Project
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                    <a href="#services" 
-                       class="px-8 py-4 border border-white/70 hover:bg-white/10 font-semibold rounded-2xl transition-all">
-                        Our Capabilities
-                    </a>
-                </div>
-                
-                <div class="mt-16 grid grid-cols-3 gap-8 text-sm">
-                    <div>
-                        <div class="text-4xl font-bold text-white">50+</div>
-                        <div class="text-gray-300">Projects Completed</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl font-bold text-white">15+</div>
-                        <div class="text-gray-300">Years Experience</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl font-bold text-white">200+</div>
-                        <div class="text-gray-300">Happy Clients</div>
-                    </div>
-                </div>
-            </div>
+        <!-- Mobile menu panel -->
+        <div id="mobileMenu" class="lg:hidden absolute inset-x-0 top-full px-4">
+            <nav class="bg-white rounded-2xl shadow-2xl border border-slate-100 p-3" aria-label="Mobile">
+                <a href="#home" class="m-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-brand-50"><i class="fa-solid fa-house w-5 text-brand-500"></i>Home</a>
+                <a href="#about" class="m-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-brand-50"><i class="fa-solid fa-building w-5 text-brand-500"></i>About</a>
+                <a href="#services" class="m-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-brand-50"><i class="fa-solid fa-layer-group w-5 text-brand-500"></i>Capabilities</a>
+                <a href="#process" class="m-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-brand-50"><i class="fa-solid fa-list-check w-5 text-brand-500"></i>Process</a>
+                <a href="#projects" class="m-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-brand-50"><i class="fa-solid fa-briefcase w-5 text-brand-500"></i>Projects</a>
+                <a href="#contact" class="m-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-brand-50"><i class="fa-solid fa-envelope w-5 text-brand-500"></i>Contact</a>
+                <a href="#contact" class="m-link mt-2 flex items-center justify-center gap-2 px-4 py-3.5 bg-brand-600 text-white font-semibold rounded-xl">Get a Quote <i class="fa-solid fa-arrow-right text-xs"></i></a>
+            </nav>
         </div>
-        
-        <div class="absolute bottom-10 left-1/2 animate-bounce">
-            <i class="fa-solid fa-chevron-down text-4xl"></i>
-        </div>
-    </section>
+    </header>
 
-    <!-- ABOUT -->
-    <section id="about" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                    <span class="text-blue-600 font-semibold tracking-widest">WHO WE ARE</span>
-                    <h2 class="text-5xl font-bold mt-3 mb-8 leading-tight">Excellence in Engineering &amp; Supply Chain</h2>
-                    
-                    <p class="text-lg text-gray-600 mb-6">
-                        Hermano Synergy is a dynamic Bangladeshi enterprise specializing in multi-sector infrastructure development, 
-                        institutional construction, and reliable supply chain solutions.
+    <main id="main">
+        <!-- HERO -->
+        <section id="home" class="hero-bg relative text-white min-h-[100svh] flex items-center">
+            <div class="max-w-7xl mx-auto w-full px-5 sm:px-6 pt-28 pb-24 lg:pt-32">
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-sm mb-6">
+                        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                        Dhaka, Bangladesh · Since 2010
+                    </div>
+
+                    <h1 class="font-display text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.08] tracking-tight mb-6">
+                        Building Tomorrow,<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-accent-400">Delivering Excellence</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg lg:text-xl text-slate-200 mb-10 max-w-xl leading-relaxed">
+                        Integrated solutions in civil infrastructure, institutional construction,
+                        nutritional supply, and defense logistics across Bangladesh.
                     </p>
-                    
-                    <div class="space-y-6">
-                        <div class="flex gap-5">
-                            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🏗️</div>
-                            <div>
-                                <h4 class="font-semibold text-xl">Infrastructure Mastery</h4>
-                                <p class="text-gray-600">From highways to institutional buildings, we deliver quality construction with international standards.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-5">
-                            <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">📦</div>
-                            <div>
-                                <h4 class="font-semibold text-xl">Reliable Logistics</h4>
-                                <p class="text-gray-600">Nutritional and defense supply solutions that meet the highest hygiene and certification standards.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-12 pt-8 border-t">
-                        <div class="flex items-center gap-8">
-                            <div>
-                                <p class="text-sm text-gray-500">Head Office</p>
-                                <p class="font-medium">Rampura, Banasree, Dhaka, Bangladesh</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500">Contact</p>
-                                <a href="mailto:info@hermanosynergy.com" class="font-medium text-blue-600 hover:underline">info@hermanosynergy.com</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <img src="https://picsum.photos/id/1016/800/900" 
-                         alt="Hermano Synergy Construction Site"
-                         class="rounded-3xl shadow-2xl">
-                    <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-3xl shadow-xl max-w-[220px]">
-                        <div class="flex items-center gap-4">
-                            <div class="text-5xl">🇧🇩</div>
-                            <div>
-                                <p class="font-semibold">Proudly Bangladeshi</p>
-                                <p class="text-sm text-gray-500">Serving nation-building projects since 2010</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- CAPABILITIES / SERVICES -->
-    <section id="services" class="py-24 bg-gray-100">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-blue-600 font-semibold">OUR EXPERTISE</span>
-                <h2 class="text-5xl font-bold mt-3">Project Capabilities</h2>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Card 1 -->
-                <div class="service-card bg-white rounded-3xl overflow-hidden shadow">
-                    <div class="h-56 bg-gradient-to-br from-blue-700 to-blue-900 p-8 flex items-end">
-                        <div class="text-white">
-                            <i class="fa-solid fa-road text-5xl mb-4"></i>
-                            <h3 class="text-2xl font-bold">Civil Infrastructure</h3>
-                        </div>
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                        <a href="#contact" class="px-7 py-4 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl transition-colors inline-flex items-center justify-center gap-3 shadow-xl shadow-brand-900/40">
+                            Start a Project <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#services" class="px-7 py-4 border border-white/40 hover:bg-white/10 font-semibold rounded-xl transition-colors inline-flex items-center justify-center">
+                            Our Capabilities
+                        </a>
                     </div>
-                    <div class="p-8">
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            Highways, city roads, urban paving, structural concrete casting and more.
-                        </p>
-                        <div class="mt-6 text-xs uppercase tracking-widest text-gray-500">Target Clients</div>
-                        <div class="text-sm font-medium">Roads &amp; Highways Dept • Local Government</div>
-                    </div>
-                </div>
-                
-                <!-- Card 2 -->
-                <div class="service-card bg-white rounded-3xl overflow-hidden shadow">
-                    <div class="h-56 bg-gradient-to-br from-amber-700 to-amber-900 p-8 flex items-end">
-                        <div class="text-white">
-                            <i class="fa-solid fa-school text-5xl mb-4"></i>
-                            <h3 class="text-2xl font-bold">Institutional Building</h3>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            Structural construction of multi-story schools, colleges, and campuses.
-                        </p>
-                        <div class="mt-6 text-xs uppercase tracking-widest text-gray-500">Target Clients</div>
-                        <div class="text-sm font-medium">Education Engineering Dept • Public Works</div>
-                    </div>
-                </div>
-                
-                <!-- Card 3 -->
-                <div class="service-card bg-white rounded-3xl overflow-hidden shadow">
-                    <div class="h-56 bg-gradient-to-br from-emerald-700 to-emerald-900 p-8 flex items-end">
-                        <div class="text-white">
-                            <i class="fa-solid fa-wheat-awn text-5xl mb-4"></i>
-                            <h3 class="text-2xl font-bold">Nutritional Supply</h3>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            Sourcing, hygienic packaging, and distributing fortified foods.
-                        </p>
-                        <div class="mt-6 text-xs uppercase tracking-widest text-gray-500">Target Clients</div>
-                        <div class="text-sm font-medium">Primary Education Ministry • NGOs</div>
-                    </div>
-                </div>
-                
-                <!-- Card 4 -->
-                <div class="service-card bg-white rounded-3xl overflow-hidden shadow">
-                    <div class="h-56 bg-gradient-to-br from-red-700 to-red-900 p-8 flex items-end">
-                        <div class="text-white">
-                            <i class="fa-solid fa-shield-halved text-5xl mb-4"></i>
-                            <h3 class="text-2xl font-bold">Defense Logistics</h3>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            Bulk supply of certified tactical footwear, uniforms, and institutional rations.
-                        </p>
-                        <div class="mt-6 text-xs uppercase tracking-widest text-gray-500">Target Clients</div>
-                        <div class="text-sm font-medium">Ansar • Police • Paramilitary Forces</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <span class="text-blue-600 font-semibold">RECENT WORK</span>
-                    <h2 class="text-5xl font-bold">Featured Projects</h2>
-                </div>
-                <a href="#" class="hidden md:flex items-center gap-2 text-blue-600 font-medium hover:gap-3 transition-all">
-                    View All Projects 
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="group">
-                    <div class="overflow-hidden rounded-3xl">
-                        <img src="https://picsum.photos/id/1018/600/400" class="w-full h-64 object-cover transition-transform group-hover:scale-110" alt="Highway Project">
-                    </div>
-                    <div class="mt-5">
-                        <p class="text-blue-600 text-sm font-medium">Civil Infrastructure • 2025</p>
-                        <h3 class="text-2xl font-semibold mt-1">Dhaka-Chittagong Highway Widening</h3>
-                    </div>
-                </div>
-                
-                <div class="group">
-                    <div class="overflow-hidden rounded-3xl">
-                        <img src="https://picsum.photos/id/201/600/400" class="w-full h-64 object-cover transition-transform group-hover:scale-110" alt="School Project">
-                    </div>
-                    <div class="mt-5">
-                        <p class="text-blue-600 text-sm font-medium">Institutional Building • 2024</p>
-                        <h3 class="text-2xl font-semibold mt-1">Banasree Model School Campus</h3>
-                    </div>
-                </div>
-                
-                <div class="group">
-                    <div class="overflow-hidden rounded-3xl">
-                        <img src="https://picsum.photos/id/866/600/400" class="w-full h-64 object-cover transition-transform group-hover:scale-110" alt="Ration Supply">
-                    </div>
-                    <div class="mt-5">
-                        <p class="text-blue-600 text-sm font-medium">Defense Logistics • 2025</p>
-                        <h3 class="text-2xl font-semibold mt-1">Paramilitary Forces Annual Ration Supply</h3>
-                    </div>
+                    <dl class="mt-14 grid grid-cols-3 max-w-lg divide-x divide-white/15 border-t border-white/15 pt-8">
+                        <div class="pr-4">
+                            <dt class="sr-only">Projects completed</dt>
+                            <dd class="font-display text-3xl sm:text-4xl font-bold"><span data-count="50">50</span>+</dd>
+                            <dd class="text-xs sm:text-sm text-slate-300 mt-1">Projects Completed</dd>
+                        </div>
+                        <div class="px-4">
+                            <dt class="sr-only">Years of experience</dt>
+                            <dd class="font-display text-3xl sm:text-4xl font-bold"><span data-count="15">15</span>+</dd>
+                            <dd class="text-xs sm:text-sm text-slate-300 mt-1">Years Experience</dd>
+                        </div>
+                        <div class="pl-4">
+                            <dt class="sr-only">Clients served</dt>
+                            <dd class="font-display text-3xl sm:text-4xl font-bold"><span data-count="200">200</span>+</dd>
+                            <dd class="text-xs sm:text-sm text-slate-300 mt-1">Happy Clients</dd>
+                        </div>
+                    </dl>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- CLIENTS -->
-    <section id="clients" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center text-gray-500 uppercase tracking-widest text-sm mb-12">Trusted by Government &amp; Leading Institutions</div>
-            <div class="grid grid-cols-3 md:grid-cols-6 gap-10 opacity-75">
-                <div class="flex items-center justify-center h-16 text-2xl font-bold">RHD</div>
-                <div class="flex items-center justify-center h-16 text-2xl font-bold">PWD</div>
-                <div class="flex items-center justify-center h-16 text-2xl font-bold">MoE</div>
-                <div class="flex items-center justify-center h-16 text-2xl font-bold">BANGLADESH POLICE</div>
-                <div class="flex items-center justify-center h-16 text-2xl font-bold">ANSAR</div>
-                <div class="flex items-center justify-center h-16 text-2xl font-bold">BGB</div>
-            </div>
-        </div>
-    </section>
+            <a href="#about" class="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-xs text-slate-300 hover:text-white" aria-label="Scroll to About">
+                Scroll
+                <span class="w-6 h-10 border-2 border-current rounded-full flex justify-center pt-2"><span class="w-1 h-2 bg-current rounded-full animate-bounce"></span></span>
+            </a>
+        </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="py-24 bg-blue-950 text-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-16">
-                <div>
-                    <h2 class="text-5xl font-bold leading-tight">Ready to build with us?</h2>
-                    <p class="mt-6 text-xl text-blue-200">
-                        Let's discuss your next infrastructure, construction, or supply project.
-                    </p>
-                    
-                    <div class="mt-12 space-y-8">
-                        <div class="flex items-start gap-6">
-                            <i class="fa-solid fa-location-dot text-3xl mt-1 text-blue-400"></i>
-                            <div>
-                                <p class="font-medium">Head Office</p>
-                                <p class="text-blue-200">Rampura, Banasree, Dhaka, Bangladesh</p>
+        <!-- ABOUT -->
+        <section id="about" class="py-20 lg:py-28 bg-white overflow-hidden">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6">
+                <div class="grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+                    <div class="reveal order-2 lg:order-1">
+                        <span class="text-brand-600 font-semibold text-sm tracking-[.2em] uppercase">Who we are</span>
+                        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mt-3 mb-6 leading-tight">Excellence in Engineering &amp; Supply Chain</h2>
+                        <p class="text-lg text-slate-600 mb-10 leading-relaxed">
+                            Hermano Synergy is a dynamic Bangladeshi enterprise specializing in multi-sector infrastructure development,
+                            institutional construction, and reliable supply chain solutions.
+                        </p>
+
+                        <div class="space-y-6">
+                            <div class="flex gap-5">
+                                <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-helmet-safety"></i></div>
+                                <div>
+                                    <h3 class="font-semibold text-lg text-slate-900">Infrastructure Mastery</h3>
+                                    <p class="text-slate-600">From highways to institutional buildings, we deliver quality construction with international standards.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-5">
+                                <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-truck-fast"></i></div>
+                                <div>
+                                    <h3 class="font-semibold text-lg text-slate-900">Reliable Logistics</h3>
+                                    <p class="text-slate-600">Nutritional and defense supply solutions that meet the highest hygiene and certification standards.</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-start gap-6">
-                            <i class="fa-solid fa-phone text-3xl mt-1 text-blue-400"></i>
+
+                        <div class="mt-10 pt-8 border-t border-slate-200 grid sm:grid-cols-2 gap-6">
                             <div>
-                                <p class="font-medium">Phone</p>
-                                <p class="text-blue-200">+880 1711-XXXXXX</p>
+                                <p class="text-sm text-slate-500">Head Office</p>
+                                <p class="font-medium text-slate-900">Rampura, Banasree, Dhaka</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500">Email</p>
+                                <a href="mailto:info@hermanosynergy.com" class="font-medium text-brand-600 hover:underline break-all">info@hermanosynergy.com</a>
                             </div>
                         </div>
-                        <div class="flex items-start gap-6">
-                            <i class="fa-solid fa-envelope text-3xl mt-1 text-blue-400"></i>
+                    </div>
+
+                    <div class="reveal relative order-1 lg:order-2">
+                        <div class="absolute -inset-4 bg-gradient-to-br from-brand-100 to-amber-50 rounded-[2rem] -rotate-2" aria-hidden="true"></div>
+                        <img src="https://picsum.photos/id/1016/800/900" alt="Hermano Synergy construction site"
+                             class="relative w-full aspect-[4/3] lg:aspect-[8/9] object-cover rounded-3xl shadow-2xl" loading="lazy">
+                        <div class="absolute -bottom-6 left-4 sm:-left-6 bg-white p-5 rounded-2xl shadow-xl max-w-[260px] flex items-center gap-4">
+                            <div class="text-4xl" aria-hidden="true">🇧🇩</div>
                             <div>
-                                <p class="font-medium">Email</p>
-                                <a href="mailto:info@hermanosynergy.com" class="text-blue-200 hover:text-white">info@hermanosynergy.com</a>
+                                <p class="font-semibold text-slate-900">Proudly Bangladeshi</p>
+                                <p class="text-sm text-slate-500">Serving nation-building projects since 2010</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Contact Form -->
-                <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-10 rounded-3xl">
-                    <form id="contactForm" class="space-y-6">
-                        <div class="grid grid-cols-2 gap-6">
-                            <input type="text" placeholder="First Name" 
-                                   class="bg-white/10 border border-white/30 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-400 placeholder:text-gray-400">
-                            <input type="text" placeholder="Last Name" 
-                                   class="bg-white/10 border border-white/30 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-400 placeholder:text-gray-400">
+            </div>
+        </section>
+
+        <!-- CAPABILITIES -->
+        <section id="services" class="py-20 lg:py-28 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6">
+                <div class="reveal text-center max-w-2xl mx-auto mb-14">
+                    <span class="text-brand-600 font-semibold text-sm tracking-[.2em] uppercase">Our expertise</span>
+                    <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mt-3">Project Capabilities</h2>
+                    <p class="mt-4 text-slate-600 text-lg">Four specialised divisions, one accountable partner — from the first survey to final delivery.</p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <article class="reveal card-lift group bg-white rounded-2xl p-7 border border-slate-200/70 flex flex-col">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-brand-600 to-brand-900 text-white flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-road"></i></div>
+                        <h3 class="font-display text-xl font-bold text-slate-900">Civil Infrastructure</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mt-3">Highways, city roads, urban paving, structural concrete casting and more.</p>
+                        <div class="mt-auto pt-6">
+                            <p class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Key clients</p>
+                            <p class="text-sm font-medium text-slate-700 mt-1">Roads &amp; Highways Dept · Local Government</p>
+                            <a href="#contact" data-service="Civil Infrastructure" class="service-cta mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 group-hover:gap-3 transition-all">Request a quote <i class="fa-solid fa-arrow-right text-xs"></i></a>
                         </div>
-                        <input type="email" placeholder="Business Email" 
-                               class="w-full bg-white/10 border border-white/30 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-400 placeholder:text-gray-400">
-                        <input type="text" placeholder="Company / Organization" 
-                               class="w-full bg-white/10 border border-white/30 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-400 placeholder:text-gray-400">
-                        <textarea placeholder="Tell us about your project..." rows="5"
-                                  class="w-full bg-white/10 border border-white/30 rounded-3xl px-6 py-4 focus:outline-none focus:border-blue-400 placeholder:text-gray-400"></textarea>
-                        
-                        <button type="submit"
-                                class="w-full bg-white text-blue-950 font-semibold py-5 rounded-2xl hover:bg-blue-100 transition-all">
-                            SEND MESSAGE
-                        </button>
-                    </form>
+                    </article>
+
+                    <article class="reveal card-lift group bg-white rounded-2xl p-7 border border-slate-200/70 flex flex-col">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 text-white flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-school"></i></div>
+                        <h3 class="font-display text-xl font-bold text-slate-900">Institutional Building</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mt-3">Structural construction of multi-story schools, colleges, and campuses.</p>
+                        <div class="mt-auto pt-6">
+                            <p class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Key clients</p>
+                            <p class="text-sm font-medium text-slate-700 mt-1">Education Engineering Dept · Public Works</p>
+                            <a href="#contact" data-service="Institutional Building" class="service-cta mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 group-hover:gap-3 transition-all">Request a quote <i class="fa-solid fa-arrow-right text-xs"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="reveal card-lift group bg-white rounded-2xl p-7 border border-slate-200/70 flex flex-col">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-800 text-white flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-wheat-awn"></i></div>
+                        <h3 class="font-display text-xl font-bold text-slate-900">Nutritional Supply</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mt-3">Sourcing, hygienic packaging, and distributing fortified foods.</p>
+                        <div class="mt-auto pt-6">
+                            <p class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Key clients</p>
+                            <p class="text-sm font-medium text-slate-700 mt-1">Primary Education Ministry · NGOs</p>
+                            <a href="#contact" data-service="Nutritional Supply" class="service-cta mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 group-hover:gap-3 transition-all">Request a quote <i class="fa-solid fa-arrow-right text-xs"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="reveal card-lift group bg-white rounded-2xl p-7 border border-slate-200/70 flex flex-col">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-rose-500 to-rose-800 text-white flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h3 class="font-display text-xl font-bold text-slate-900">Defense Logistics</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mt-3">Bulk supply of certified tactical footwear, uniforms, and institutional rations.</p>
+                        <div class="mt-auto pt-6">
+                            <p class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Key clients</p>
+                            <p class="text-sm font-medium text-slate-700 mt-1">Ansar · Police · Paramilitary Forces</p>
+                            <a href="#contact" data-service="Defense Logistics" class="service-cta mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-600 group-hover:gap-3 transition-all">Request a quote <i class="fa-solid fa-arrow-right text-xs"></i></a>
+                        </div>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- PROCESS -->
+        <section id="process" class="py-20 lg:py-28 bg-white">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6">
+                <div class="reveal max-w-2xl mb-14">
+                    <span class="text-brand-600 font-semibold text-sm tracking-[.2em] uppercase">How we work</span>
+                    <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mt-3">A clear path from enquiry to handover</h2>
+                </div>
+
+                <ol class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                    <li class="reveal relative pl-0">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="font-display text-sm font-bold w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center">01</span>
+                            <span class="hidden lg:block flex-1 h-px bg-slate-200" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="font-semibold text-lg text-slate-900">Consultation</h3>
+                        <p class="text-slate-600 text-sm mt-2 leading-relaxed">We listen to your requirements, review tender documents and visit the site.</p>
+                    </li>
+                    <li class="reveal relative">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="font-display text-sm font-bold w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center">02</span>
+                            <span class="hidden lg:block flex-1 h-px bg-slate-200" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="font-semibold text-lg text-slate-900">Planning &amp; Quote</h3>
+                        <p class="text-slate-600 text-sm mt-2 leading-relaxed">A transparent cost estimate, timeline and compliance plan you can sign off on.</p>
+                    </li>
+                    <li class="reveal relative">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="font-display text-sm font-bold w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center">03</span>
+                            <span class="hidden lg:block flex-1 h-px bg-slate-200" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="font-semibold text-lg text-slate-900">Execution</h3>
+                        <p class="text-slate-600 text-sm mt-2 leading-relaxed">Skilled teams and certified suppliers deliver on schedule with regular progress reports.</p>
+                    </li>
+                    <li class="reveal relative">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="font-display text-sm font-bold w-10 h-10 rounded-full bg-accent-500 text-white flex items-center justify-center"><i class="fa-solid fa-check"></i></span>
+                        </div>
+                        <h3 class="font-semibold text-lg text-slate-900">Handover &amp; Support</h3>
+                        <p class="text-slate-600 text-sm mt-2 leading-relaxed">Quality inspection, documentation and after-delivery support.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects" class="py-20 lg:py-28 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6">
+                <div class="reveal flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-12">
+                    <div>
+                        <span class="text-brand-600 font-semibold text-sm tracking-[.2em] uppercase">Recent work</span>
+                        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mt-3">Featured Projects</h2>
+                    </div>
+                    <a href="#contact" class="inline-flex items-center gap-2 text-brand-600 font-semibold hover:gap-3 transition-all">
+                        Discuss your project <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    <article class="reveal group bg-white rounded-2xl overflow-hidden border border-slate-200/70 card-lift">
+                        <div class="relative overflow-hidden aspect-[3/2]">
+                            <img src="https://picsum.photos/id/1018/600/400" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Highway widening project" loading="lazy">
+                            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-semibold text-slate-800 px-3 py-1 rounded-full">2025</span>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-brand-600 text-sm font-medium">Civil Infrastructure</p>
+                            <h3 class="font-display text-xl font-bold text-slate-900 mt-1">Dhaka–Chittagong Highway Widening</h3>
+                        </div>
+                    </article>
+
+                    <article class="reveal group bg-white rounded-2xl overflow-hidden border border-slate-200/70 card-lift">
+                        <div class="relative overflow-hidden aspect-[3/2]">
+                            <img src="https://picsum.photos/id/201/600/400" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="School campus project" loading="lazy">
+                            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-semibold text-slate-800 px-3 py-1 rounded-full">2024</span>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-amber-600 text-sm font-medium">Institutional Building</p>
+                            <h3 class="font-display text-xl font-bold text-slate-900 mt-1">Banasree Model School Campus</h3>
+                        </div>
+                    </article>
+
+                    <article class="reveal group bg-white rounded-2xl overflow-hidden border border-slate-200/70 card-lift sm:col-span-2 lg:col-span-1">
+                        <div class="relative overflow-hidden aspect-[3/2] sm:aspect-[3/1] lg:aspect-[3/2]">
+                            <img src="https://picsum.photos/id/866/600/400" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Ration supply operation" loading="lazy">
+                            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-semibold text-slate-800 px-3 py-1 rounded-full">2025</span>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-rose-600 text-sm font-medium">Defense Logistics</p>
+                            <h3 class="font-display text-xl font-bold text-slate-900 mt-1">Paramilitary Forces Annual Ration Supply</h3>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- CLIENTS -->
+        <section id="clients" class="py-16 bg-white border-y border-slate-100">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6">
+                <p class="text-center text-slate-500 uppercase tracking-[.2em] text-xs font-semibold mb-8">Trusted by government &amp; leading institutions</p>
+                <ul class="flex flex-wrap justify-center gap-3 sm:gap-4">
+                    <li class="px-5 py-3 rounded-xl bg-slate-50 border border-slate-200 font-display font-bold text-slate-600" title="Roads and Highways Department">RHD</li>
+                    <li class="px-5 py-3 rounded-xl bg-slate-50 border border-slate-200 font-display font-bold text-slate-600" title="Public Works Department">PWD</li>
+                    <li class="px-5 py-3 rounded-xl bg-slate-50 border border-slate-200 font-display font-bold text-slate-600" title="Ministry of Education">MoE</li>
+                    <li class="px-5 py-3 rounded-xl bg-slate-50 border border-slate-200 font-display font-bold text-slate-600">Bangladesh Police</li>
+                    <li class="px-5 py-3 rounded-xl bg-slate-50 border border-slate-200 font-display font-bold text-slate-600">Ansar</li>
+                    <li class="px-5 py-3 rounded-xl bg-slate-50 border border-slate-200 font-display font-bold text-slate-600" title="Border Guard Bangladesh">BGB</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="relative py-20 lg:py-28 bg-brand-950 text-white overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-[30rem] h-[30rem] bg-brand-600/30 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="relative max-w-7xl mx-auto px-5 sm:px-6">
+                <div class="grid lg:grid-cols-5 gap-12 lg:gap-16">
+                    <div class="lg:col-span-2 reveal">
+                        <span class="text-brand-400 font-semibold text-sm tracking-[.2em] uppercase">Contact</span>
+                        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mt-3">Ready to build with us?</h2>
+                        <p class="mt-5 text-lg text-brand-200">Tell us about your infrastructure, construction, or supply project. We usually reply within one business day.</p>
+
+                        <ul class="mt-10 space-y-4">
+                            <li class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                                <span class="w-11 h-11 rounded-lg bg-brand-600/30 text-brand-200 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-location-dot"></i></span>
+                                <div>
+                                    <p class="text-sm text-brand-200">Head Office</p>
+                                    <p class="font-medium">Rampura, Banasree, Dhaka, Bangladesh</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                                <span class="w-11 h-11 rounded-lg bg-brand-600/30 text-brand-200 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-phone"></i></span>
+                                <div>
+                                    <p class="text-sm text-brand-200">Phone</p>
+                                    <p class="font-medium">+880 1711-XXXXXX</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                                <span class="w-11 h-11 rounded-lg bg-brand-600/30 text-brand-200 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-envelope"></i></span>
+                                <div class="min-w-0">
+                                    <p class="text-sm text-brand-200">Email</p>
+                                    <a href="mailto:info@hermanosynergy.com" class="font-medium hover:text-brand-200 break-all">info@hermanosynergy.com</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="lg:col-span-3 reveal">
+                        <form id="contactForm" class="bg-white/[.06] backdrop-blur-lg border border-white/15 p-6 sm:p-10 rounded-3xl space-y-5" novalidate>
+                            <div class="grid sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="firstName" class="block text-sm font-medium text-brand-100 mb-2">First name <span class="text-rose-300">*</span></label>
+                                    <input id="firstName" name="firstName" type="text" autocomplete="given-name" required class="field" placeholder="Rahim">
+                                    <p class="error hidden text-xs text-rose-300 mt-1.5">Please enter your first name.</p>
+                                </div>
+                                <div>
+                                    <label for="lastName" class="block text-sm font-medium text-brand-100 mb-2">Last name</label>
+                                    <input id="lastName" name="lastName" type="text" autocomplete="family-name" class="field" placeholder="Uddin">
+                                </div>
+                            </div>
+                            <div class="grid sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-brand-100 mb-2">Business email <span class="text-rose-300">*</span></label>
+                                    <input id="email" name="email" type="email" autocomplete="email" required class="field" placeholder="you@company.com">
+                                    <p class="error hidden text-xs text-rose-300 mt-1.5">Please enter a valid email address.</p>
+                                </div>
+                                <div>
+                                    <label for="company" class="block text-sm font-medium text-brand-100 mb-2">Company / Organization</label>
+                                    <input id="company" name="company" type="text" autocomplete="organization" class="field" placeholder="Organization name">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="service" class="block text-sm font-medium text-brand-100 mb-2">Service of interest</label>
+                                <select id="service" name="service" class="field">
+                                    <option value="">Select a service…</option>
+                                    <option>Civil Infrastructure</option>
+                                    <option>Institutional Building</option>
+                                    <option>Nutritional Supply</option>
+                                    <option>Defense Logistics</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-brand-100 mb-2">Project details <span class="text-rose-300">*</span></label>
+                                <textarea id="message" name="message" rows="5" required minlength="10" class="field resize-y" placeholder="Scope, location, timeline…"></textarea>
+                                <p class="error hidden text-xs text-rose-300 mt-1.5">Please describe your project (at least 10 characters).</p>
+                            </div>
+
+                            <button type="submit" class="w-full bg-white text-brand-950 font-semibold py-4 rounded-xl hover:bg-brand-100 transition-colors inline-flex items-center justify-center gap-2">
+                                Send Message <i class="fa-solid fa-paper-plane text-sm"></i>
+                            </button>
+                            <p id="formStatus" class="hidden text-sm rounded-xl px-4 py-3 bg-emerald-500/15 border border-emerald-400/30 text-emerald-200" role="status" aria-live="polite"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- FOOTER -->
-    <footer class="bg-gray-900 text-gray-400">
-        <div class="max-w-7xl mx-auto px-6 pt-20 pb-12">
-            <div class="grid md:grid-cols-4 gap-10">
+    <footer class="bg-slate-950 text-slate-400">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 pt-16 pb-10">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
                 <div>
-                    <div class="flex items-center gap-3 text-white mb-6">
-                        <div class="w-9 h-9 bg-blue-600 rounded-2xl flex items-center justify-center font-bold">HS</div>
-                        <span class="text-2xl font-bold tracking-tight">Hermano Synergy</span>
+                    <div class="flex items-center gap-3 text-white mb-5">
+                        <span class="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center font-display font-bold text-sm">HS</span>
+                        <span class="font-display text-xl font-bold tracking-tight">Hermano Synergy</span>
                     </div>
-                    <p class="text-sm">Integrated solutions for a stronger Bangladesh.</p>
+                    <p class="text-sm leading-relaxed">Integrated solutions for a stronger Bangladesh.</p>
+                    <div class="mt-6 flex gap-3">
+                        <a href="#" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-brand-600 hover:text-white flex items-center justify-center transition-colors" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-brand-600 hover:text-white flex items-center justify-center transition-colors" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
                 </div>
-                
+
                 <div>
-                    <h4 class="text-white font-semibold mb-6">Quick Links</h4>
+                    <h4 class="text-white font-semibold mb-5">Company</h4>
                     <ul class="space-y-3 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Our Services</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Ongoing Projects</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Tenders</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#process" class="hover:text-white transition-colors">How We Work</a></li>
+                        <li><a href="#projects" class="hover:text-white transition-colors">Projects</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Careers &amp; Tenders</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
-                    <h4 class="text-white font-semibold mb-6">Services</h4>
+                    <h4 class="text-white font-semibold mb-5">Services</h4>
                     <ul class="space-y-3 text-sm">
-                        <li>Civil Infrastructure</li>
-                        <li>Institutional Construction</li>
-                        <li>Nutritional Supply Chain</li>
-                        <li>Defense Logistics</li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Civil Infrastructure</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Institutional Construction</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Nutritional Supply Chain</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Defense Logistics</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
-                    <h4 class="text-white font-semibold mb-6">Get In Touch</h4>
-                    <p class="text-sm leading-relaxed">
-                        Rampura, Banasree<br>
-                        Dhaka, Bangladesh
-                    </p>
-                    <div class="mt-8 flex gap-5 text-2xl">
-                        <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-linkedin"></i></a>
-                    </div>
+                    <h4 class="text-white font-semibold mb-5">Get In Touch</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex gap-3"><i class="fa-solid fa-location-dot mt-1 text-brand-400"></i>Rampura, Banasree, Dhaka</li>
+                        <li class="flex gap-3"><i class="fa-solid fa-phone mt-1 text-brand-400"></i>+880 1711-XXXXXX</li>
+                        <li class="flex gap-3"><i class="fa-solid fa-envelope mt-1 text-brand-400"></i><a href="mailto:info@hermanosynergy.com" class="hover:text-white break-all">info@hermanosynergy.com</a></li>
+                    </ul>
                 </div>
             </div>
-            
-            <div class="border-t border-gray-800 mt-20 pt-8 text-xs flex flex-col md:flex-row justify-between items-center gap-4">
-                <p>© 2026 Hermano Synergy. All Rights Reserved.</p>
-                <p class="text-center md:text-right">Proudly Made in Bangladesh</p>
+
+            <div class="border-t border-white/10 mt-14 pt-8 text-xs flex flex-col sm:flex-row justify-between items-center gap-3">
+                <p>© <span id="year">2026</span> Hermano Synergy. All rights reserved.</p>
+                <p>Proudly made in Bangladesh 🇧🇩</p>
             </div>
         </div>
     </footer>
 
+    <!-- Back to top -->
+    <a href="#home" id="toTop" class="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-brand-600 hover:bg-brand-700 text-white shadow-xl flex items-center justify-center opacity-0 pointer-events-none translate-y-3 transition-all" aria-label="Back to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
     <script>
-        // Tailwind script already loaded via CDN
-        
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                if (this.getAttribute('href') !== '#') {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth'
-                        });
+        (function () {
+            const header = document.getElementById('siteHeader');
+            const toTop = document.getElementById('toTop');
+            const menuBtn = document.getElementById('menuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Header style + back-to-top visibility on scroll
+            function onScroll() {
+                const y = window.scrollY;
+                header.classList.toggle('scrolled', y > 40 || mobileMenu.classList.contains('open'));
+                const show = y > 600;
+                toTop.classList.toggle('opacity-0', !show);
+                toTop.classList.toggle('pointer-events-none', !show);
+                toTop.classList.toggle('translate-y-3', !show);
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+
+            // Mobile menu
+            function setMenu(open) {
+                mobileMenu.classList.toggle('open', open);
+                menuBtn.setAttribute('aria-expanded', String(open));
+                menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+                menuBtn.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+                onScroll();
+            }
+            menuBtn.addEventListener('click', e => {
+                e.stopPropagation(); // icon swap detaches e.target, which would trip the outside-click check
+                setMenu(!mobileMenu.classList.contains('open'));
+            });
+            mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+            document.addEventListener('click', e => {
+                if (mobileMenu.classList.contains('open') && !header.contains(e.target)) setMenu(false);
+            });
+            window.addEventListener('resize', () => { if (window.innerWidth >= 1024) setMenu(false); });
+
+            // Highlight the nav link of the section in view
+            const links = document.querySelectorAll('.nav-link');
+            const sectionObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id));
+                });
+            }, { rootMargin: '-45% 0px -50% 0px' });
+            document.querySelectorAll('main section[id]').forEach(s => sectionObserver.observe(s));
+
+            // Reveal on scroll
+            const revealObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        revealObserver.unobserve(entry.target);
                     }
-                }
+                });
+            }, { threshold: 0.12 });
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+            // Count-up for hero stats
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (!reduceMotion) {
+                document.querySelectorAll('[data-count]').forEach(el => {
+                    const target = +el.dataset.count, start = performance.now(), dur = 1400;
+                    (function tick(now) {
+                        const p = Math.min((now - start) / dur, 1);
+                        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+                        if (p < 1) requestAnimationFrame(tick);
+                    })(start);
+                });
+            }
+
+            // "Request a quote" on a service card pre-selects it in the form
+            const serviceSelect = document.getElementById('service');
+            document.querySelectorAll('.service-cta').forEach(a => {
+                a.addEventListener('click', () => { serviceSelect.value = a.dataset.service; });
             });
-        });
-        
-        // Simple form submission alert
-        const form = document.getElementById('contactForm');
-        if (form) {
-            form.addEventListener('submit', function(e) {
+
+            // Contact form validation with inline messages
+            const form = document.getElementById('contactForm');
+            const status = document.getElementById('formStatus');
+            function validate(field) {
+                const ok = field.checkValidity() && (field.type !== 'text' || field.value.trim() !== '' || !field.required);
+                field.classList.toggle('invalid', !ok);
+                field.setAttribute('aria-invalid', String(!ok));
+                const err = field.parentElement.querySelector('.error');
+                if (err) err.classList.toggle('hidden', ok);
+                return ok;
+            }
+            form.querySelectorAll('[required]').forEach(f => {
+                f.addEventListener('blur', () => validate(f));
+                f.addEventListener('input', () => { if (f.classList.contains('invalid')) validate(f); });
+            });
+            form.addEventListener('submit', e => {
                 e.preventDefault();
-                alert("Thank you! Your message has been received. We'll get back to you shortly.");
+                const fields = [...form.querySelectorAll('[required]')];
+                const results = fields.map(validate);
+                const firstBad = fields[results.indexOf(false)];
+                if (firstBad) { firstBad.focus(); return; }
+
+                const name = form.firstName.value.trim();
+                status.textContent = `Thank you, ${name}! Your message has been received — we'll get back to you within one business day.`;
+                status.classList.remove('hidden');
                 form.reset();
+                setTimeout(() => status.classList.add('hidden'), 8000);
             });
-        }
-        
-       
-        console.log('%cHermano Synergy Website Loaded Successfully', 'color: #3b82f6; font-weight: bold;');
+        })();
     </script>
 </body>
 </html>
