@@ -37,6 +37,20 @@
                 lang = (p === "bn" || p === "en") ? p : (saved === "bn" || saved === "en") ? saved : (prefersBn ? "bn" : "en");
             } catch (e) {}
             d.setAttribute("data-lang", lang);
+
+            // Display settings (theme, colour, menu style, text size, animations) chosen in the settings panel
+            var P = { theme: ["light", "dark", "auto"], accent: ["blue", "green", "purple", "orange", "red", "teal"],
+                      header: ["auto", "light", "dark", "accent"], text: ["sm", "md", "lg", "xl"], motion: ["on", "off"] };
+            var prefs = {};
+            try { prefs = JSON.parse(localStorage.getItem("hs-prefs") || "{}") || {}; } catch (e) {}
+            var pick = function (k, def) { return P[k].indexOf(prefs[k]) > -1 ? prefs[k] : def; };
+            var theme = pick("theme", "light");
+            if (theme === "auto") theme = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            d.setAttribute("data-theme", theme);
+            d.setAttribute("data-accent", pick("accent", "blue"));
+            d.setAttribute("data-header", pick("header", "auto"));
+            d.setAttribute("data-text", pick("text", "md"));
+            d.setAttribute("data-motion", pick("motion", "on"));
             if (lang === "bn") {
                 d.classList.add("lang-loading");
                 setTimeout(function () { d.classList.remove("lang-loading"); }, 2000); // never stay hidden if a script fails
@@ -67,7 +81,7 @@
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] bg-white text-brand-700 px-4 py-2 rounded-lg shadow">Skip to content</a>
 
     <!-- HEADER -->
-    <header id="siteHeader" class="fixed inset-x-0 top-0 z-50">
+    <header id="siteHeader" class="fixed inset-x-0 top-0 z-50" data-look="transparent">
         <div class="max-w-7xl mx-auto px-5 sm:px-6">
             <div class="flex justify-between items-center h-16 lg:h-20">
                 <a href="#home" class="flex items-center gap-3" aria-label="Hermano Synergy home">
@@ -88,7 +102,7 @@
                     <button id="langToggle" type="button" class="lang-btn inline-flex items-center gap-2 h-10 px-2.5 sm:px-3 rounded-xl border text-sm font-semibold transition-colors" aria-label="বাংলায় দেখুন" lang="bn">
                         <i class="fa-solid fa-language text-base hidden sm:inline" aria-hidden="true"></i><span class="lang-label">বাংলা</span>
                     </button>
-                    <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-brand-600/25">
+                    <a href="#contact" class="btn-quote hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-brand-600/25">
                         Get a Quote <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
                     <button id="menuBtn" class="menu-btn lg:hidden w-11 h-11 rounded-xl flex items-center justify-center text-xl hover:bg-white/10" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -598,12 +612,86 @@
         </div>
     </footer>
 
+    <!-- Display settings: floating button + panel -->
+    <button id="settingsBtn" type="button" class="settings-fab fixed bottom-5 left-5 z-40 w-12 h-12 rounded-full flex items-center justify-center text-lg transition-colors"
+            aria-label="Display settings" title="Display settings" aria-haspopup="dialog" aria-controls="settingsPanel" aria-expanded="false">
+        <i class="fa-solid fa-palette" aria-hidden="true"></i>
+    </button>
+
+    <div id="settingsPanel" class="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
+        <div class="settings-backdrop" data-close></div>
+        <div class="settings-sheet p-6 sm:p-7">
+            <div class="flex items-center justify-between mb-6">
+                <h2 id="settingsTitle" class="font-display text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-sliders text-brand-600" aria-hidden="true"></i><span>Display settings</span></h2>
+                <button type="button" class="s-close w-10 h-10 rounded-xl flex items-center justify-center text-lg" data-close aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </div>
+
+            <div class="space-y-7">
+                <div role="group" aria-labelledby="lblTheme">
+                    <p id="lblTheme" class="text-sm font-semibold mb-3">Theme</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" class="opt-btn" data-pref="theme" data-value="light"><i class="fa-solid fa-sun" aria-hidden="true"></i><span>Light</span></button>
+                        <button type="button" class="opt-btn" data-pref="theme" data-value="dark"><i class="fa-solid fa-moon" aria-hidden="true"></i><span>Dark</span></button>
+                        <button type="button" class="opt-btn" data-pref="theme" data-value="auto"><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i><span>Auto</span></button>
+                    </div>
+                    <p class="s-muted text-xs mt-2">Auto follows your device's light or dark setting.</p>
+                </div>
+
+                <div role="group" aria-labelledby="lblAccent">
+                    <p id="lblAccent" class="text-sm font-semibold mb-3">Accent colour</p>
+                    <div class="flex flex-wrap gap-3">
+                        <button type="button" class="swatch" style="--c:#2563eb" data-pref="accent" data-value="blue" aria-label="Blue" title="Blue"><i class="fa-solid fa-check" aria-hidden="true"></i></button>
+                        <button type="button" class="swatch" style="--c:#059669" data-pref="accent" data-value="green" aria-label="Green" title="Green"><i class="fa-solid fa-check" aria-hidden="true"></i></button>
+                        <button type="button" class="swatch" style="--c:#7c3aed" data-pref="accent" data-value="purple" aria-label="Purple" title="Purple"><i class="fa-solid fa-check" aria-hidden="true"></i></button>
+                        <button type="button" class="swatch" style="--c:#ea580c" data-pref="accent" data-value="orange" aria-label="Orange" title="Orange"><i class="fa-solid fa-check" aria-hidden="true"></i></button>
+                        <button type="button" class="swatch" style="--c:#e11d48" data-pref="accent" data-value="red" aria-label="Red" title="Red"><i class="fa-solid fa-check" aria-hidden="true"></i></button>
+                        <button type="button" class="swatch" style="--c:#0d9488" data-pref="accent" data-value="teal" aria-label="Teal" title="Teal"><i class="fa-solid fa-check" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+
+                <div role="group" aria-labelledby="lblHeader">
+                    <p id="lblHeader" class="text-sm font-semibold mb-3">Menu style</p>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button type="button" class="opt-btn" data-pref="header" data-value="auto"><span>Auto</span></button>
+                        <button type="button" class="opt-btn" data-pref="header" data-value="light"><span>Light</span></button>
+                        <button type="button" class="opt-btn" data-pref="header" data-value="dark"><span>Dark</span></button>
+                        <button type="button" class="opt-btn" data-pref="header" data-value="accent"><span>Colour</span></button>
+                    </div>
+                </div>
+
+                <div role="group" aria-labelledby="lblText">
+                    <p id="lblText" class="text-sm font-semibold mb-3">Text size</p>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button type="button" class="opt-btn" data-pref="text" data-value="sm" aria-label="Small" title="Small"><span class="text-xs">A</span></button>
+                        <button type="button" class="opt-btn" data-pref="text" data-value="md" aria-label="Default" title="Default"><span class="text-sm">A</span></button>
+                        <button type="button" class="opt-btn" data-pref="text" data-value="lg" aria-label="Large" title="Large"><span class="text-base">A</span></button>
+                        <button type="button" class="opt-btn" data-pref="text" data-value="xl" aria-label="Extra large" title="Extra large"><span class="text-lg">A</span></button>
+                    </div>
+                </div>
+
+                <div role="group" aria-labelledby="lblMotion">
+                    <p id="lblMotion" class="text-sm font-semibold mb-3">Animations</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" class="opt-btn" data-pref="motion" data-value="on"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span>On</span></button>
+                        <button type="button" class="opt-btn" data-pref="motion" data-value="off"><i class="fa-solid fa-ban" aria-hidden="true"></i><span>Off</span></button>
+                    </div>
+                </div>
+
+                <div class="pt-5 border-t s-border flex items-center justify-between gap-4">
+                    <p class="s-muted text-xs">Your choices are saved on this device.</p>
+                    <button type="button" id="settingsReset" class="opt-btn px-4 whitespace-nowrap"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i><span>Reset to default</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Back to top -->
     <a href="#home" id="toTop" class="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-brand-600 hover:bg-brand-700 text-white shadow-xl flex items-center justify-center opacity-0 pointer-events-none translate-y-3 transition-all" aria-label="Back to top">
         <i class="fa-solid fa-arrow-up"></i>
     </a>
 
     <script src="assets/js/i18n.js" defer></script>
+    <script src="assets/js/settings.js" defer></script>
     <script src="assets/js/main.js" defer></script>
 </body>
 </html>

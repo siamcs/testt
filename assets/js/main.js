@@ -9,16 +9,24 @@
     const mobileMenu = document.getElementById('mobileMenu');
     menuBtn.setAttribute('aria-label', t('openMenu'));
 
-    // Header style + back-to-top visibility on scroll
+    // Header look + back-to-top visibility on scroll.
+    // Menu style "auto" = transparent over the hero, then light (or dark in dark theme) once scrolled.
+    const root = document.documentElement;
     function onScroll() {
         const y = window.scrollY;
-        header.classList.toggle('scrolled', y > 40 || mobileMenu.classList.contains('open'));
+        const solid = y > 40 || mobileMenu.classList.contains('open');
+        const style = root.getAttribute('data-header') || 'auto';
+        const look = style !== 'auto' ? style
+            : !solid ? 'transparent'
+            : root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        header.setAttribute('data-look', look);
         const show = y > 600;
         toTop.classList.toggle('opacity-0', !show);
         toTop.classList.toggle('pointer-events-none', !show);
         toTop.classList.toggle('translate-y-3', !show);
     }
     window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('prefschange', onScroll);
     onScroll();
 
     // Mobile menu
@@ -62,7 +70,8 @@
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
     // Count-up for hero stats
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        || root.getAttribute('data-motion') === 'off';
     if (!reduceMotion) {
         document.querySelectorAll('[data-count]').forEach(el => {
             const target = +el.dataset.count, start = performance.now(), dur = 1400;

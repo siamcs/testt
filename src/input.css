@@ -4,6 +4,38 @@
 
 /* Edit this file, then run `npm run build` to regenerate assets/css/styles.css */
 
+/* ---------- Accent colour palettes (visitor picks one in Display settings) ----------
+   Values are "R G B" so Tailwind opacity classes like bg-brand-600/30 keep working. */
+:root, [data-accent="blue"] {
+    --brand-50: 239 245 255; --brand-100: 219 232 254; --brand-200: 191 214 254; --brand-400: 96 165 250; --brand-500: 59 130 246;
+    --brand-600: 37 99 235; --brand-700: 29 78 216; --brand-900: 15 42 92; --brand-950: 11 27 63;
+}
+[data-accent="green"] {
+    --brand-50: 236 253 245; --brand-100: 209 250 229; --brand-200: 167 243 208; --brand-400: 52 211 153; --brand-500: 16 185 129;
+    --brand-600: 5 150 105; --brand-700: 4 120 87; --brand-900: 6 78 59; --brand-950: 2 44 34;
+}
+[data-accent="purple"] {
+    --brand-50: 245 243 255; --brand-100: 237 233 254; --brand-200: 221 214 254; --brand-400: 167 139 250; --brand-500: 139 92 246;
+    --brand-600: 124 58 237; --brand-700: 109 40 217; --brand-900: 76 29 149; --brand-950: 46 16 101;
+}
+[data-accent="orange"] {
+    --brand-50: 255 247 237; --brand-100: 255 237 213; --brand-200: 254 215 170; --brand-400: 251 146 60; --brand-500: 249 115 22;
+    --brand-600: 234 88 12; --brand-700: 194 65 12; --brand-900: 124 45 18; --brand-950: 67 20 7;
+}
+[data-accent="red"] {
+    --brand-50: 255 241 242; --brand-100: 255 228 230; --brand-200: 254 205 211; --brand-400: 251 113 133; --brand-500: 244 63 94;
+    --brand-600: 225 29 72; --brand-700: 190 18 60; --brand-900: 136 19 55; --brand-950: 76 5 25;
+}
+[data-accent="teal"] {
+    --brand-50: 240 253 250; --brand-100: 204 251 241; --brand-200: 153 246 228; --brand-400: 45 212 191; --brand-500: 20 184 166;
+    --brand-600: 13 148 136; --brand-700: 15 118 110; --brand-900: 19 78 74; --brand-950: 4 47 46;
+}
+
+/* ---------- Text size (Display settings) — everything is sized in rem, so this scales the whole page ---------- */
+html[data-text="sm"] { font-size: 93.75%; }
+html[data-text="lg"] { font-size: 112.5%; }
+html[data-text="xl"] { font-size: 125%; }
+
 html { scroll-behavior: smooth; }
 
 /* Offset anchor jumps so the sticky header never covers section titles */
@@ -11,28 +43,42 @@ section[id] { scroll-margin-top: 5rem; }
 
 .hero-bg {
     background:
-        linear-gradient(105deg, rgba(11, 27, 63, .92) 0%, rgba(11, 27, 63, .75) 45%, rgba(11, 27, 63, .35) 100%),
+        linear-gradient(105deg, rgb(var(--brand-950) / .92) 0%, rgb(var(--brand-950) / .75) 45%, rgb(var(--brand-950) / .35) 100%),
         url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat,
-        #0b1b3f;
+        rgb(var(--brand-950));
 }
 
-/* Header: transparent over the hero, solid once scrolled */
+/* ---------- Header / menu
+   main.js sets data-look: "transparent" (over the hero), "light", "dark" or "accent",
+   based on scroll position and the visitor's Menu style choice. ---------- */
 #siteHeader { transition: background-color .3s, box-shadow .3s, color .3s; }
-#siteHeader.scrolled { background: rgba(255, 255, 255, .92); backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgb(0 0 0 / .06), 0 8px 24px -12px rgb(0 0 0 / .15); }
+#siteHeader:not([data-look="transparent"]) { backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgb(0 0 0 / .06), 0 8px 24px -12px rgb(0 0 0 / .15); }
+#siteHeader[data-look="light"] { background: rgba(255, 255, 255, .92); }
+#siteHeader[data-look="dark"] { background: rgba(15, 23, 42, .92); }
+#siteHeader[data-look="accent"] { background: rgb(var(--brand-700) / .95); }
+
+/* Text on transparent, dark and accent headers is white; on a light header it is dark */
 #siteHeader .nav-link { color: rgba(255, 255, 255, .85); }
-#siteHeader.scrolled .nav-link { color: #334155; }
 #siteHeader .nav-link:hover, #siteHeader .nav-link.active { color: #fff; }
-#siteHeader.scrolled .nav-link:hover, #siteHeader.scrolled .nav-link.active { color: #2563eb; }
+#siteHeader .brand-name, #siteHeader .menu-btn { color: #fff; }
+#siteHeader .lang-btn { color: #fff; border-color: rgba(255, 255, 255, .35); }
+#siteHeader .lang-btn:hover { background: rgba(255, 255, 255, .1); }
+#siteHeader[data-look="dark"] .nav-link.active, #siteHeader[data-look="dark"] .nav-link:hover { color: rgb(var(--brand-400)); }
+#siteHeader[data-look="accent"] .brand-name .text-brand-500 { color: rgb(var(--brand-100)); }
+#siteHeader[data-look="accent"] .btn-quote { background: #fff; color: rgb(var(--brand-700)); }
+
+#siteHeader[data-look="light"] .nav-link { color: #334155; }
+#siteHeader[data-look="light"] .nav-link:hover, #siteHeader[data-look="light"] .nav-link.active { color: rgb(var(--brand-600)); }
+#siteHeader[data-look="light"] .brand-name, #siteHeader[data-look="light"] .menu-btn { color: #0f172a; }
+#siteHeader[data-look="light"] .lang-btn { color: #0f172a; border-color: #cbd5e1; }
+#siteHeader[data-look="light"] .lang-btn:hover { background: #f1f5f9; }
+
 .nav-link { position: relative; }
 .nav-link::after {
     content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px;
     background: currentColor; transform: scaleX(0); transition: transform .25s ease;
 }
 .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
-#siteHeader .brand-name { color: #fff; }
-#siteHeader.scrolled .brand-name { color: #0f172a; }
-#siteHeader .menu-btn { color: #fff; }
-#siteHeader.scrolled .menu-btn { color: #0f172a; }
 
 /* Mobile menu */
 #mobileMenu { transition: opacity .25s ease, transform .25s ease, visibility .25s; }
@@ -43,18 +89,18 @@ section[id] { scroll-margin-top: 5rem; }
 .js .reveal.visible { opacity: 1; transform: none; }
 
 .card-lift { transition: transform .35s cubic-bezier(.4, 0, .2, 1), box-shadow .35s; }
-.card-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -16px rgb(15 42 92 / .25); }
+.card-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -16px rgb(var(--brand-900) / .25); }
 
 /* Image that failed to load: show a branded placeholder instead of a broken icon */
 .img-fallback {
-    background: linear-gradient(135deg, #dbe8fe, #eff5ff);
+    background: linear-gradient(135deg, rgb(var(--brand-100)), rgb(var(--brand-50)));
     position: relative;
 }
 .img-fallback img { visibility: hidden; }
 .img-fallback::after {
     content: '\f03e'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 2.5rem; color: #93b4f5;
+    font-size: 2.5rem; color: rgb(var(--brand-400));
 }
 
 /* FAQ */
@@ -68,31 +114,108 @@ section[id] { scroll-margin-top: 5rem; }
     width: 100%; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .2);
     border-radius: .875rem; padding: .875rem 1rem; color: #fff; transition: border-color .2s, background-color .2s;
 }
-.field::placeholder { color: rgba(191, 214, 254, .55); }
-.field:focus { outline: none; border-color: #60a5fa; background: rgba(255, 255, 255, .1); box-shadow: 0 0 0 3px rgba(96, 165, 250, .25); }
+.field::placeholder { color: rgb(var(--brand-200) / .55); }
+.field:focus { outline: none; border-color: rgb(var(--brand-400)); background: rgba(255, 255, 255, .1); box-shadow: 0 0 0 3px rgb(var(--brand-400) / .25); }
 .field.invalid { border-color: #f87171; }
 select.field option { color: #0f172a; }
 .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
-:focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; }
+:focus-visible { outline: 2px solid rgb(var(--brand-500)); outline-offset: 3px; }
 
+/* ---------- Animations off: by device setting, or by the visitor's Display settings choice ---------- */
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .js .reveal { opacity: 1; transform: none; transition: none; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+html[data-motion="off"] { scroll-behavior: auto; }
+html[data-motion="off"] .reveal { opacity: 1 !important; transform: none !important; }
+html[data-motion="off"] *, html[data-motion="off"] *::before, html[data-motion="off"] *::after { animation: none !important; transition: none !important; }
 
 @media print {
-    #siteHeader, #toTop, #contactForm, .no-print { display: none !important; }
+    #siteHeader, #toTop, #settingsBtn, #settingsPanel, #contactForm, .no-print { display: none !important; }
     .js .reveal { opacity: 1; transform: none; }
     section { break-inside: avoid; }
 }
 
+/* ---------- Dark theme ----------
+   The hero, contact and footer are already dark. These rules recolour the light sections,
+   the mobile menu and cards when the visitor picks Dark (or Auto on a dark-mode device). */
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="dark"] body { background: #0b1120; color: #cbd5e1; }
+
+html[data-theme="dark"] :is(#about, #process, #clients).bg-white { background: #0f172a; }
+html[data-theme="dark"] :is(#services, #projects, #faq).bg-slate-50 { background: #0b1120; }
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) :is(.bg-white, .bg-slate-50) { background: #1e293b; }
+html[data-theme="dark"] #projects .bg-white\/90 { background: rgb(15 23 42 / .85); }
+
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) .text-slate-900 { color: #f1f5f9; }
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) .text-slate-800 { color: #e2e8f0; }
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) .text-slate-700 { color: #cbd5e1; }
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) .text-slate-600 { color: #a3b1c6; }
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) .text-slate-500 { color: #94a3b8; }
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) .text-slate-400 { color: #7c8aa0; }
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) .text-brand-600 { color: rgb(var(--brand-400)); }
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) .text-amber-600 { color: #fbbf24; }
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) .text-rose-600 { color: #fb7185; }
+
+html[data-theme="dark"] :is(#about, #services, #process, #projects, #clients, #faq, #mobileMenu) :is(.border-slate-200, .border-slate-200\/70, .border-slate-100) { border-color: rgb(255 255 255 / .08); }
+html[data-theme="dark"] :is(#about, #clients).border-slate-200, html[data-theme="dark"] #clients.border-slate-100 { border-color: rgb(255 255 255 / .06); }
+html[data-theme="dark"] #process .bg-slate-200 { background: rgb(255 255 255 / .1); }
+html[data-theme="dark"] :is(#about, #mobileMenu) .bg-brand-50, html[data-theme="dark"] #mobileMenu .hover\:bg-brand-50:hover { background: rgb(var(--brand-500) / .15); }
+html[data-theme="dark"] #about .bg-amber-50 { background: rgb(245 158 11 / .15); }
+html[data-theme="dark"] #about .from-brand-100 { opacity: .15; }
+html[data-theme="dark"] #faq .faq[open] { box-shadow: none; }
+html[data-theme="dark"] .img-fallback { background: linear-gradient(135deg, #1e293b, #0f172a); }
+
+/* ---------- Display settings button & panel ---------- */
+.settings-fab {
+    background: #fff; color: rgb(var(--brand-700)); border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px -8px rgb(15 23 42 / .35);
+}
+.settings-fab:hover { background: rgb(var(--brand-50)); }
+html[data-theme="dark"] .settings-fab { background: #1e293b; color: rgb(var(--brand-400)); border-color: rgb(255 255 255 / .1); }
+
+#settingsPanel[hidden] { display: none; }
+.settings-backdrop { position: fixed; inset: 0; background: rgb(2 6 23 / .45); animation: fade-in .2s ease; }
+.settings-sheet {
+    --s-bg: #fff; --s-text: #0f172a; --s-muted: #64748b; --s-border: #e2e8f0; --s-opt: #f8fafc;
+    position: fixed; z-index: 1; background: var(--s-bg); color: var(--s-text);
+    inset: auto 0 0 0; max-height: 88vh; overflow-y: auto; border-radius: 1.5rem 1.5rem 0 0;
+    box-shadow: 0 -20px 50px -12px rgb(0 0 0 / .35); animation: sheet-up .28s cubic-bezier(.2, .8, .2, 1);
+}
+@media (min-width: 640px) {
+    .settings-sheet { inset: 0 0 0 auto; width: 24rem; max-height: none; border-radius: 1.5rem 0 0 1.5rem; animation: sheet-in .28s cubic-bezier(.2, .8, .2, 1); }
+}
+html[data-theme="dark"] .settings-sheet { --s-bg: #0f172a; --s-text: #f1f5f9; --s-muted: #94a3b8; --s-border: rgb(255 255 255 / .1); --s-opt: #1e293b; }
+.settings-sheet .s-muted { color: var(--s-muted); }
+.settings-sheet .s-border { border-color: var(--s-border); }
+.settings-sheet .s-close:hover { background: var(--s-opt); }
+
+.opt-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+    padding: .6rem .5rem; border-radius: .75rem; border: 1.5px solid var(--s-border); background: var(--s-opt);
+    font-size: .875rem; font-weight: 600; color: var(--s-text); transition: border-color .15s, background-color .15s, color .15s;
+}
+.opt-btn:hover { border-color: rgb(var(--brand-400)); }
+.opt-btn[aria-pressed="true"] { border-color: rgb(var(--brand-600)); background: rgb(var(--brand-600) / .1); color: rgb(var(--brand-700)); }
+html[data-theme="dark"] .opt-btn[aria-pressed="true"] { color: rgb(var(--brand-400)); background: rgb(var(--brand-500) / .15); }
+
+.swatch {
+    width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: var(--c);
+    box-shadow: 0 0 0 2px var(--s-bg), 0 0 0 4px transparent; transition: box-shadow .15s, transform .15s;
+    display: inline-flex; align-items: center; justify-content: center; color: #fff;
+}
+.swatch:hover { transform: scale(1.08); }
+.swatch i { opacity: 0; }
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--s-bg), 0 0 0 4px var(--c); }
+.swatch[aria-pressed="true"] i { opacity: 1; }
+
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes sheet-up { from { transform: translateY(100%); } }
+@keyframes sheet-in { from { transform: translateX(100%); } }
+
 /* ---------- Language switcher & Bangla typography ---------- */
-#siteHeader .lang-btn { color: #fff; border-color: rgba(255, 255, 255, .35); }
-#siteHeader .lang-btn:hover { background: rgba(255, 255, 255, .1); }
-#siteHeader.scrolled .lang-btn { color: #0f172a; border-color: #cbd5e1; }
-#siteHeader.scrolled .lang-btn:hover { background: #f1f5f9; }
 html[lang="en"] .lang-btn .lang-label { font-family: 'Hind Siliguri', sans-serif; }
 html[lang="bn"] .lang-btn .lang-label { font-family: 'Inter', sans-serif; }
 
